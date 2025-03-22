@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Air Pro - Умный мониторинг качества воздуха</title>
+    <link rel="icon" type="image/png" href="assets/logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #2196F3;
+            --secondary-color: #1976D2;
+            --text-color: #333;
+            --bg-color: #f5f5f5;
+            --card-bg: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            margin-bottom: 4rem;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 2rem;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 0 5%;
+            margin-bottom: 4rem;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .button {
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+        }
+
+        .button-primary {
+            background: white;
+            color: var(--primary-color);
+        }
+
+        .button-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid white;
+        }
+
+        .features {
+            padding: 5rem 5%;
+            background: var(--card-bg);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-card i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+
+        .feature-card li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+            text-align: left;
+        }
+
+        .feature-card li:before {
+            content: "•";
+            color: var(--primary-color);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .charts-section {
+            padding: 5rem 5%;
+            background: var(--bg-color);
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .chart-container {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .footer {
+            background: var(--text-color);
+            color: white;
+            padding: 3rem 5%;
+            text-align: center;
+        }
+
+        .social-links {
+            margin-top: 2rem;
+        }
+
+        .social-links a {
+            color: white;
+            margin: 0 1rem;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .button {
+                padding: 0.8rem 1.5rem;
+                font-size: 0.9rem;
+            }
+
+            .feature-card {
+                padding: 1.5rem;
+            }
+
+            .feature-card i {
+                font-size: 2rem;
+            }
+
+            .feature-card h3 {
+                font-size: 1.2rem;
+            }
+
+            .feature-card p {
+                font-size: 0.9rem;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .chart-container {
+                padding: 1rem;
+            }
+
+            .nav {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .nav-links a {
+                margin: 0;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+
+            .hardware-content {
+                grid-template-columns: 1fr !important;
+            }
+
+            .hardware-image {
+                order: -1;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            #recommendation-text {
+                padding: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .alerts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .markdown-content h1 {
+                font-size: 1.8em;
+            }
+
+            .markdown-content h2 {
+                font-size: 1.4em;
+            }
+
+            .markdown-content h3 {
+                font-size: 1.2em;
+            }
+
+            .markdown-content p {
+                font-size: 0.9rem;
+            }
+
+            .markdown-content ul {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .feature-card {
+                padding: 1rem;
+            }
+
+            .chart-container {
+                padding: 0.8rem;
+            }
+
+            .button {
+                padding: 0.7rem 1.2rem;
+                font-size: 0.85rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Стили для Markdown */
+        .markdown-content h1 {
+            font-size: 2em;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+
+        .markdown-content h2 {
+            font-size: 1.5em;
+            margin-bottom: 0.8rem;
+            color: var(--text-color);
+        }
+
+        .markdown-content h3 {
+            font-size: 1.2em;
+            margin-bottom: 0.6rem;
+            color: var(--text-color);
+        }
+
+        .markdown-content p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .markdown-content ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .markdown-content li {
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .markdown-content strong {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .markdown-content em {
+            font-style: italic;
+        }
+
+        .markdown-content blockquote {
+            border-left: 4px solid var(--primary-color);
+            padding-left: 1rem;
+            margin: 1rem 0;
+            color: #666;
+        }
+
+        #recommendation-text {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+        <div class="logo">
+                <i class="fas fa-wind"></i>
+                Air Pro
+            </div>
+            <div class="nav-links">
+                <a href="#features">Возможности</a>
+                <a href="#charts">Мониторинг</a>
+                <a href="#about">О проекте</a>
+        </div>
+    </nav>
+        <div class="hero">
+            <h1 data-aos="fade-up">Умный мониторинг качества воздуха</h1>
+            <p data-aos="fade-up" data-aos-delay="100">
+                Профессиональное решение для контроля качества воздуха в реальном времени
+            </p>
+            <div class="cta-buttons" data-aos="fade-up" data-aos-delay="200">
+                <a href="assets/AirPro.exe" class="button button-primary" download>Скачать приложение</a>
+                <a href="https://github.com/sergeystarodubtcev/AirPro" class="button button-secondary">
+                    <i class="fab fa-github"></i> Исходный код
+                </a>
+        </div>
+        </div>
+    </header>
+
+    <section id="features" class="features">
+        <h2 class="section-title" data-aos="fade-up">Возможности системы</h2>
+        <div class="features-grid">
+            <div class="feature-card" data-aos="fade-up">
+                <i class="fas fa-chart-line"></i>
+                <h3>Мониторинг с ИИ</h3>
+                <p>Интеллектуальное отслеживание показателей с анализом трендов и прогнозированием изменений</p>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                <i class="fas fa-brain"></i>
+                <h3>Умные рекомендации</h3>
+                <p>ИИ анализирует данные и предлагает персонализированные рекомендации по улучшению качества воздуха</p>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>Облачная аналитика</h3>
+                <p>Расширенный анализ данных с использованием облачных вычислений и машинного обучения</p>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                <i class="fas fa-mobile-alt"></i>
+                <h3>Кроссплатформенность</h3>
+                <p>Работа на всех операционных системах с синхронизацией настроек через облако</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="hardware" class="features" style="background: var(--bg-color);">
+        <h2 class="section-title" data-aos="fade-up">Комплексное решение для мониторинга воздуха</h2>
+        
+        <div class="hardware-content" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center;">
+            <div class="hardware-text" data-aos="fade-right">
+                <div class="feature-card" style="height: 100%;">
+                    <i class="fas fa-microchip"></i>
+                    <h3>Умное устройство на базе Arduino</h3>
+                    <p>Air Pro - это инновационное решение для мониторинга качества воздуха, объединяющее:</p>
+                    <ul>
+                        <li>Высокоточные датчики для измерения 6 ключевых параметров воздуха</li>
+                        <li>Микроконтроллер Arduino для обработки данных</li>
+                        <li>Модуль Wi-Fi для передачи данных на сервер</li>
+                        <li>Современное ПО с удобным интерфейсом</li>
+                        <li>Веб-платформу для удаленного мониторинга</li>
+                    </ul>
+                    <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                        <a href="assets/arduino_scheme.pdf" class="button button-primary" style="background: var(--primary-color); color: white; padding: 0.5rem 1rem; font-size: 0.9rem;">
+                            Скачать инструкцию
+                        </a>
+                        <a href="assets/arduino_code.ino" class="button button-primary" style="background: var(--secondary-color); color: white; padding: 0.5rem 1rem; font-size: 0.9rem;">
+                            Скачать код Arduino
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="hardware-image" data-aos="fade-left">
+                <div class="feature-card" style="padding: 1rem;">
+                    <img src="assets/arduino.png" alt="Схема Arduino" style="width: 100%; height: auto; border-radius: 10px;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="app" class="features" style="background: var(--bg-color);">
+        <h2 class="section-title" data-aos="fade-up">Умное приложение Air Pro</h2>
+        
+        <div class="hardware-content" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center;">
+            <div class="hardware-text" data-aos="fade-right">
+                <div class="feature-card" style="height: 100%;">
+                    <i class="fas fa-desktop"></i>
+                    <h3>Интеллектуальный интерфейс</h3>
+                    <p>Современное приложение с расширенными возможностями:</p>
+                    <ul>
+                        <li>Гибкая настройка пороговых значений с рекомендациями ИИ</li>
+                        <li>Интерактивные графики с прогнозированием трендов</li>
+                        <li>Умные уведомления на основе анализа данных</li>
+                        <li>Экспорт данных в Excel с автоматической аналитикой</li>
+                        <li>Персонализированные отчеты о качестве воздуха</li>
+                        <li>Рекомендации по улучшению микроклимата от ИИ</li>
+                    </ul>
+                    <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                        <a href="assets/AirPro.exe" class="button" download>
+                            Скачать для Windows
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="hardware-image" data-aos="fade-left">
+                <div class="feature-card" style="padding: 1rem;">
+                    <img src="assets/display.png" alt="Интерфейс приложения" style="width: 100%; height: auto; border-radius: 10px;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="charts" class="charts-section">
+        <h2 class="section-title" data-aos="fade-up">Мониторинг показателей</h2>
+        <div class="charts-grid">
+            <div class="chart-container" data-aos="fade-up">
+                <canvas id="dustChart"></canvas>
+            </div>
+            <div class="chart-container" data-aos="fade-up" data-aos-delay="100">
+                <canvas id="gasChart"></canvas>
+            </div>
+            <div class="chart-container" data-aos="fade-up" data-aos-delay="200">
+                <canvas id="coChart"></canvas>
+            </div>
+            <div class="chart-container" data-aos="fade-up" data-aos-delay="300">
+                <canvas id="methaneChart"></canvas>
+            </div>
+            <div class="chart-container" data-aos="fade-up" data-aos-delay="400">
+                <canvas id="humidityChart"></canvas>
+                </div>
+            <div class="chart-container" data-aos="fade-up" data-aos-delay="500">
+                <canvas id="temperatureChart"></canvas>
+            </div>
+        </div>
+
+        <div class="alerts-section" data-aos="fade-up" style="margin-top: 2rem;">
+            <h3 class="section-title" style="margin-bottom: 1.5rem;">Тревоги</h3>
+            <div class="alerts-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                <div class="feature-card" style="padding: 1rem;">
+                    <i class="fas fa-exclamation-triangle" style="color: #ff4444; font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
+                    <h4 style="margin: 0.5rem 0; font-size: 1.1rem;">Критические значения</h4>
+                    <div id="critical-alerts" style="text-align: left; font-size: 0.9rem;">
+                        <!-- Здесь будут отображаться критические тревоги -->
+                    </div>
+                </div>
+                <div class="feature-card" style="padding: 1rem;">
+                    <i class="fas fa-exclamation-circle" style="color: #ffbb33; font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
+                    <h4 style="margin: 0.5rem 0; font-size: 1.1rem;">Предупреждения</h4>
+                    <div id="warning-alerts" style="text-align: left; font-size: 0.9rem;">
+                        <!-- Здесь будут отображаться предупреждения -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="ai-recommendations" class="features">
+        <h2 class="section-title" data-aos="fade-up">ИИ-рекомендации</h2>
+        <div class="feature-card" data-aos="fade-up">
+            <i class="fas fa-robot"></i>
+            <h3>Анализ качества воздуха</h3>
+            <p>Получите персонализированные рекомендации от ИИ на основе последних измерений</p>
+            <div id="recommendations-content" style="margin-top: 1rem; text-align: left;">
+                <div id="loading" style="display: none; text-align: center;">
+                    <i class="fas fa-spinner fa-spin"></i> Анализируем данные...
+                </div>
+                <div id="recommendation-text" style="background: #f8f9fa; padding: 1rem; border-radius: 10px; margin-top: 1rem;"></div>
+            </div>
+            <button onclick="getAIRecommendations()" class="button button-primary" style="margin-top: 1rem;">
+                <i class="fas fa-magic"></i> Получить рекомендации
+            </button>
+        </div>
+    </section>
+
+    <section id="about" class="features">
+        <h2 class="section-title" data-aos="fade-up">О проекте</h2>
+        
+        <div class="feature-card" data-aos="fade-up">
+            <i class="fas fa-info-circle"></i>
+            <h3>Что такое Air Pro?</h3>
+            <p>Air Pro - это умная система мониторинга качества воздуха, которая помогает следить за чистотой воздуха в помещении в режиме реального времени. Система собирает данные о концентрации вредных веществ, температуре и влажности, анализирует их и предупреждает вас при отклонении от нормы.</p>
+        </div>
+
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+            <i class="fas fa-cogs"></i>
+            <h3>Как это работает?</h3>
+            <p>Принцип работы системы:</p>
+            <ul style="text-align: left; margin-top: 10px;">
+                <li>Датчики непрерывно измеряют 6 параметров воздуха</li>
+                <li>Микроконтроллер Arduino обрабатывает полученные данные</li>
+                <li>Данные передаются через Wi-Fi на сервер ThingSpeak</li>
+                <li>Приложение получает и отображает данные в реальном времени</li>
+                <li>При превышении пороговых значений система оповещает пользователя</li>
+            </ul>
+        </div>
+
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+            <i class="fas fa-tasks"></i>
+            <h3>Что умеет система?</h3>
+            <ul style="text-align: left; margin-top: 10px;">
+                <li>Мониторинг концентрации пыли, газов, CO и метана</li>
+                <li>Контроль температуры и влажности воздуха</li>
+                <li>ИИ-анализ качества воздуха и прогнозирование</li>
+                <li>Умные рекомендации по улучшению микроклимата</li>
+                <li>Экспорт данных в Excel с автоматической аналитикой</li>
+                <li>Хранение и анализ истории измерений в облаке</li>
+                <li>Доступ к данным и управление с любого устройства</li>
+            </ul>
+        </div>
+
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+            <i class="fas fa-users"></i>
+            <h3>Для кого это?</h3>
+            <ul style="text-align: left; margin-top: 10px;">
+                <li>Для дома: контроль качества воздуха в жилых помещениях</li>
+                <li>Для офиса: обеспечение комфортной рабочей среды</li>
+                <li>Для производства: мониторинг воздуха в рабочих зонах</li>
+                <li>Для учебных заведений: контроль вентиляции в аудиториях</li>
+                <li>Для медицинских учреждений: поддержание чистоты воздуха</li>
+            </ul>
+        </div>
+
+        <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+            <i class="fas fa-tools"></i>
+            <h3>Установка и использование</h3>
+            <p>Начать работу с Air Pro очень просто:</p>
+            <ul style="text-align: left; margin-top: 10px;">
+                <li>Соберите устройство по нашей пошаговой инструкции</li>
+                <li>Загрузите прошивку в Arduino</li>
+                <li>Установите приложение на компьютер</li>
+                <li>Подключите устройство через USB</li>
+                <li>Настройте Wi-Fi подключение для передачи данных</li>
+            </ul>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>© 2025 Air Pro. Все права защищены.</p>
+        <div class="social-links">
+            <a href="https://github.com/sergeystarodubtcev/AirPro"><i class="fab fa-github"></i></a>
+            <a href="http://q99525fe.beget.tech/"><i class="fas fa-globe"></i></a>
+            <a href="#"><i class="fab fa-telegram"></i></a>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+
+        // Конфигурация ThingSpeak
+        const THINGSPEAK_CHANNEL_ID = 'YOUR_CHANNEL_ID';  // Замените на ваш Channel ID
+        const THINGSPEAK_READ_KEY = 'YOUR_READ_API_KEY';  // Замените на ваш Read API Key
+        const THINGSPEAK_URL = `https://api.thingspeak.com/channels/${THINGSPEAK_CHANNEL_ID}/feeds.json?api_key=${THINGSPEAK_READ_KEY}&results=20`;
+
+        // Функция для создания графика
+        function createChart(ctx, label, color) {
+            return new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: label,
+                        data: [],
+                        borderColor: color,
+                        tension: 0.4,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Инициализация графиков
+        const charts = {
+            dust: createChart(document.getElementById('dustChart').getContext('2d'), 'Пыль', '#FF6384'),
+            gas: createChart(document.getElementById('gasChart').getContext('2d'), 'Газ', '#36A2EB'),
+            co: createChart(document.getElementById('coChart').getContext('2d'), 'CO', '#FFCE56'),
+            methane: createChart(document.getElementById('methaneChart').getContext('2d'), 'Метан', '#4BC0C0'),
+            humidity: createChart(document.getElementById('humidityChart').getContext('2d'), 'Влажность', '#9966FF'),
+            temperature: createChart(document.getElementById('temperatureChart').getContext('2d'), 'Температура', '#FF9F40')
+        };
+
+        // Функция обновления данных
+        async function updateData() {
+            try {
+                const response = await fetch(THINGSPEAK_URL);
+                const data = await response.json();
+                
+                // Очистка данных графиков
+                Object.values(charts).forEach(chart => {
+                    chart.data.labels = [];
+                    chart.data.datasets[0].data = [];
+                });
+
+                // Обработка данных от ThingSpeak
+                data.feeds.forEach(feed => {
+                    const timestamp = new Date(feed.created_at).toLocaleTimeString();
+                    
+                    // Обновление каждого графика
+                    charts.dust.data.labels.push(timestamp);
+                    charts.gas.data.labels.push(timestamp);
+                    charts.co.data.labels.push(timestamp);
+                    charts.methane.data.labels.push(timestamp);
+                    charts.humidity.data.labels.push(timestamp);
+                    charts.temperature.data.labels.push(timestamp);
+
+                    charts.dust.data.datasets[0].data.push(feed.field1);
+                    charts.gas.data.datasets[0].data.push(feed.field2);
+                    charts.co.data.datasets[0].data.push(feed.field3);
+                    charts.methane.data.datasets[0].data.push(feed.field4);
+                    charts.humidity.data.datasets[0].data.push(feed.field5);
+                    charts.temperature.data.datasets[0].data.push(feed.field6);
+                });
+
+                // Обновление всех графиков
+                Object.values(charts).forEach(chart => chart.update());
+
+                // Проверка и отображение тревог
+                const lastReading = data.feeds[data.feeds.length - 1];
+                updateAlerts(lastReading);
+
+            } catch (error) {
+                console.error('Ошибка при получении данных с ThingSpeak:', error);
+            }
+        }
+
+        // Функция проверки и отображения тревог
+        function updateAlerts(data) {
+            const criticalAlerts = document.getElementById('critical-alerts');
+            const warningAlerts = document.getElementById('warning-alerts');
+            
+            // Очистка предыдущих тревог
+            criticalAlerts.innerHTML = '';
+            warningAlerts.innerHTML = '';
+
+            // Пороговые значения для параметров "улица"
+            const thresholds = {
+                dust: { warning: 30, critical: 60 },      // ПДК для пыли на улице
+                gas: { warning: 350, critical: 500 },      // ПДК для газа на улице
+                co: { warning: 300, critical: 500 },        // ПДК для CO на улице
+                methane: { warning: 500, critical: 650 }, // ПДК для метана на улице
+                humidity: { warning: 85, critical: 95 },    // Критические значения влажности
+                temperature: { warning: 25, critical: 40 }  // Критические значения температуры
+            };
+
+            // Проверка каждого параметра
+            const parameters = {
+                'Пыль': { value: data.field1, unit: 'мкг/м³', thresholds: thresholds.dust },
+                'Газ': { value: data.field2, unit: 'ppm', thresholds: thresholds.gas },
+                'CO': { value: data.field3, unit: 'ppm', thresholds: thresholds.co },
+                'Метан': { value: data.field4, unit: 'ppm', thresholds: thresholds.methane },
+                'Влажность': { value: data.field5, unit: '%', thresholds: thresholds.humidity },
+                'Температура': { value: data.field6, unit: '°C', thresholds: thresholds.temperature }
+            };
+
+            // Формирование списков тревог
+            for (const [name, param] of Object.entries(parameters)) {
+                const value = parseFloat(param.value);
+                if (value >= param.thresholds.critical) {
+                    criticalAlerts.innerHTML += `
+                        <div style="margin-bottom: 0.3rem; color: #ff4444;">
+                            <i class="fas fa-exclamation-triangle" style="font-size: 0.9rem;"></i>
+                            ${name}: ${value}${param.unit}
+                        </div>`;
+                } else if (value >= param.thresholds.warning) {
+                    warningAlerts.innerHTML += `
+                        <div style="margin-bottom: 0.3rem; color: #ffbb33;">
+                            <i class="fas fa-exclamation-circle" style="font-size: 0.9rem;"></i>
+                            ${name}: ${value}${param.unit}
+                        </div>`;
+                }
+            }
+
+            // Если нет тревог, показываем соответствующее сообщение
+            if (criticalAlerts.innerHTML === '') {
+                criticalAlerts.innerHTML = '<div style="color: #00C851; font-size: 0.9rem;">Нет критических значений</div>';
+            }
+            if (warningAlerts.innerHTML === '') {
+                warningAlerts.innerHTML = '<div style="color: #00C851; font-size: 0.9rem;">Нет предупреждений</div>';
+            }
+        }
+
+        // Обновление данных каждые 10 секунд
+        setInterval(updateData, 10000);
+        updateData(); // Первоначальное обновление
+
+        // Функция для получения рекомендаций от ИИ
+        async function getAIRecommendations() {
+            const loading = document.getElementById('loading');
+            const recommendationText = document.getElementById('recommendation-text');
+            
+            loading.style.display = 'block';
+            recommendationText.innerHTML = '';
+
+            try {
+                // Получаем последние данные с ThingSpeak
+                const response = await fetch(THINGSPEAK_URL);
+                const data = await response.json();
+                const lastReading = data.feeds[data.feeds.length - 1];
+
+                // Формируем текст для анализа
+                const prompt = `Проанализируй следующие показатели качества воздуха и дай рекомендации по улучшению. Используй Markdown для форматирования ответа (## для заголовков, * для списков, ** для жирного текста):
+                    Пыль: ${lastReading.field1} мкг/м³ (порог предупреждения: 35, критический: 50)
+                    Газ: ${lastReading.field2} ppm (порог предупреждения: 200, критический: 300)
+                    CO: ${lastReading.field3} ppm (порог предупреждения: 100, критический: 200)
+                    Метан: ${lastReading.field4} ppm (порог предупреждения: 400, критический: 500)
+                    Влажность: ${lastReading.field5}% (порог предупреждения: 70, критический: 80)
+                    Температура: ${lastReading.field6}°C (порог предупреждения: 30, критический: 35)`;
+
+                // Запрос к OpenRouter API (Gemini)
+                const aiResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer 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',
+                        'HTTP-Referer': 'http://q99525fe.beget.tech/',
+                        'X-Title': 'Air Pro Monitoring'
+                    },
+                    body: JSON.stringify({
+                        model: 'google/gemini-pro',
+                        messages: [{
+                            role: 'user',
+                            content: prompt
+                        }]
+                    })
+                });
+
+                const aiData = await aiResponse.json();
+                const recommendation = aiData.choices[0].message.content;
+
+                // Преобразуем Markdown в HTML и отображаем
+                recommendationText.className = 'markdown-content';
+                recommendationText.innerHTML = marked.parse(recommendation);
+
+            } catch (error) {
+                recommendationText.innerHTML = 'Извините, произошла ошибка при получении рекомендаций. Попробуйте позже.';
+                console.error('Ошибка при получении рекомендаций:', error);
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html> 
